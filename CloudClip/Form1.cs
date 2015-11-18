@@ -11,14 +11,16 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace CloudClip
 {
+    
     public partial class Form1 : Form
     {
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
+        string url = "http://159.203.86.104:8080/CloudClipServer/Service?method=";
 
-        
 
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
@@ -88,6 +90,7 @@ namespace CloudClip
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             RemoveClipboardFormatListener(this.Handle);     // Remove our window from the clipboard's format listener list.
+
         }
 
 
@@ -129,8 +132,8 @@ namespace CloudClip
             foreach (string element in clip) {
                 listBox1.Items.Add(element);
             }
-            string json = JsonConvert.SerializeObject(clip.ToArray());
-            System.IO.File.WriteAllText(@"test.txt", json);
+           // string json = JsonConvert.SerializeObject(clip.ToArray());
+           // System.IO.File.WriteAllText(@"test.txt", json);
 
         }
 
@@ -178,6 +181,26 @@ namespace CloudClip
         }
 
         private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            HttpWebRequest request = WebRequest.CreateHttp("http://159.203.86.104:8080/CloudClipServer/Service?method=connect");
+            string session = textBox1.Text;
+            request.Headers.Add("session", session );
+            WebResponse response = request.GetResponse();
+
+            JsonReader jReader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
+            
+            while (jReader.Read())
+            {
+                Console.WriteLine(jReader.Value);
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
