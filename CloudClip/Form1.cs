@@ -333,6 +333,8 @@ namespace CloudClip
                         {
                             LinkedListNode<String> node = clip.Find(text);
                             clip.Remove(node);
+                            updateLB();
+                            loadClipBoard();
                         }
                     }
                 }
