@@ -332,7 +332,10 @@ namespace CloudClip
                         else
                         {
                             LinkedListNode<String> node = clip.Find(text);
-                            clip.Remove(node);
+                            if (node != null)
+                            {
+                                clip.Remove(node);
+                            }
                             updateLB();
                             loadClipBoard();
                         }
