@@ -19,7 +19,7 @@ namespace CloudClip
     {
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
-        String url = "http://localhost:8080/CloudClipServer/Service?method=";
+        String url = "http://159.203.86.104/CloudClipServer/Service?method=";
         String sessionKey;
         String uuid;
 
@@ -186,7 +186,8 @@ namespace CloudClip
         private void Connect()
         {
 
-            String sessionKey = sessionKeyTextBox.Text;
+            sessionKey = sessionKeyTextBox.Text;
+
             if (sessionKey.Length > 0)
             {
 
@@ -198,11 +199,24 @@ namespace CloudClip
                 {
                     JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
                     reader.SupportMultipleContent = true;
+                    reader.Read();
+                    reader.Read();
+                    reader.Read();
+                    uuid = reader.Value.ToString();
+
+                    Console.WriteLine(uuid);
                     
                     while (reader.Read())
                     {
-                        Console.WriteLine(reader.Value);
+                        if (reader.Value != null && reader.Value.ToString() == "clip")
+                        {
+                            reader.Read();
+                            clip.AddLast(reader.Value.ToString());
+                        }
                     }
+
+                    updateLB();
+                    loadClipBoard();
                 }
 
                 response.Close();
