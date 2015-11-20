@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace CloudClip
 {
@@ -19,7 +19,7 @@ namespace CloudClip
     {
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
-        String url = "https://localhost:8080/CloudClipServer/Service?method=";
+        String url = "http://localhost:8080/CloudClipServer/Service?method=";
         String sessionKey;
         String uuid;
 
@@ -132,8 +132,6 @@ namespace CloudClip
             foreach (string element in clip) {
                 listBox1.Items.Add(element);
             }
-            string json = JsonConvert.SerializeObject(clip.ToArray());
-            System.IO.File.WriteAllText(@"test.txt", json);
 
         }
 
@@ -191,13 +189,20 @@ namespace CloudClip
             String sessionKey = sessionKeyTextBox.Text;
             if (sessionKey.Length > 0)
             {
+
                 HttpWebRequest request = WebRequest.CreateHttp(url + "connect");
                 request.Headers.Add("session", sessionKey);
                 HttpWebResponse response = (HttpWebResponse) request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-
+                    JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
+                    reader.SupportMultipleContent = true;
+                    
+                    while (reader.Read())
+                    {
+                        Console.WriteLine(reader.Value);
+                    }
                 }
 
                 response.Close();
@@ -238,7 +243,7 @@ namespace CloudClip
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-
+            Connect();
         }
     }
 }

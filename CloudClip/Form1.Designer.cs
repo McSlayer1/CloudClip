@@ -31,7 +31,7 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.RemoveButton = new System.Windows.Forms.Button();
-            this.sessionKeyText = new System.Windows.Forms.TextBox();
+            this.sessionKeyTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.connectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -67,13 +67,13 @@
             this.RemoveButton.UseVisualStyleBackColor = true;
             this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
-            // sessionKeyText
+            // sessionKeyTextBox
             // 
-            this.sessionKeyText.Location = new System.Drawing.Point(149, 120);
-            this.sessionKeyText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.sessionKeyText.Name = "sessionKeyText";
-            this.sessionKeyText.Size = new System.Drawing.Size(77, 20);
-            this.sessionKeyText.TabIndex = 4;
+            this.sessionKeyTextBox.Location = new System.Drawing.Point(149, 120);
+            this.sessionKeyTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sessionKeyTextBox.Name = "sessionKeyTextBox";
+            this.sessionKeyTextBox.Size = new System.Drawing.Size(77, 20);
+            this.sessionKeyTextBox.TabIndex = 4;
             // 
             // label2
             // 
@@ -104,7 +104,7 @@
             this.ClientSize = new System.Drawing.Size(257, 226);
             this.Controls.Add(this.connectButton);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.sessionKeyText);
+            this.Controls.Add(this.sessionKeyTextBox);
             this.Controls.Add(this.RemoveButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listBox1);
@@ -121,7 +121,7 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button RemoveButton;
-        private System.Windows.Forms.TextBox sessionKeyText;
+        private System.Windows.Forms.TextBox sessionKeyTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button connectButton;
     }
