@@ -12,6 +12,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Net;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace CloudClip
 {
@@ -222,6 +223,8 @@ namespace CloudClip
                     updateLB();
                     loadClipBoard();
                     isConnected = true;
+
+                    new Thread(new ThreadStart(MonitorConnection)).Start();
                 }
 
                 response.Close();
@@ -289,7 +292,12 @@ namespace CloudClip
                 request.Headers.Add("uuid", uuid);
                 request.KeepAlive = true;
                 HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+                JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
 
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader.Value);
+                }
                 response.Close();
             }
         }
