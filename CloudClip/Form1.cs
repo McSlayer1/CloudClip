@@ -235,5 +235,10 @@ namespace CloudClip
                 response.Close();
             }
         }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
