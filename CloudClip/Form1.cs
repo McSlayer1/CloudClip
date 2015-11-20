@@ -92,6 +92,7 @@ namespace CloudClip
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             RemoveClipboardFormatListener(this.Handle);     // Remove our window from the clipboard's format listener list.
+            Disconnect();
         }
 
 
