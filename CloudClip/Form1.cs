@@ -11,14 +11,17 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace CloudClip
 {
     public partial class Form1 : Form
     {
+        Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
-
-        
+        String url = "https://localhost:8080/CloudClipServer/Service?method=";
+        String sessionKey;
+        String uuid;
 
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
@@ -179,7 +182,58 @@ namespace CloudClip
 
         private void label2_Click(object sender, EventArgs e)
         {
+            Connect();
+        }
 
+        private void Connect()
+        {
+
+            String sessionKey = sessionKeyTextBox.Text;
+            if (sessionKey.Length > 0)
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(url + "connect");
+                request.Headers.Add("session", sessionKey);
+                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+
+                }
+
+                response.Close();
+            }
+        }
+
+        private void Disconnect()
+        {
+            if (isConnected)
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(url + "disconnect");
+                request.Headers.Add("session", sessionKey);
+                request.Headers.Add("uuid", uuid);
+                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    isConnected = false;
+                }
+
+                response.Close();
+            }
+        }
+
+        private void MonitorConnection()
+        {
+            while (isConnected)
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(url + "fetch");
+                request.Headers.Add("session", sessionKey);
+                request.Headers.Add("uuid", uuid);
+                request.KeepAlive = true;
+                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+
+                response.Close();
+            }
         }
     }
 }
