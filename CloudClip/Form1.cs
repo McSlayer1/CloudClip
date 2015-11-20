@@ -24,6 +24,10 @@ namespace CloudClip
         String sessionKey;
         String uuid;
 
+        // This delegate enables asynchronous calls for setting
+        // the text property on a TextBox control.
+        delegate void SetTextCallback();
+
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
         /// </summary>
@@ -122,22 +126,36 @@ namespace CloudClip
     //set head of clip list as item in system clipboard
         void loadClipBoard()
         {
-            if (clip.Count > 0)
+            if (this.listBox1.InvokeRequired)
             {
-                Clipboard.SetText(clip.First());
+                SetTextCallback d = new SetTextCallback(loadClipBoard);
+                this.Invoke(d, new object[] { });
             }
-            
+            else
+            {
+                if (clip.Count > 0)
+                {
+                    Clipboard.SetText(clip.First());
+                }
+            }            
         }
 
 
         //update list box
         void updateLB()
         {
-            listBox1.Items.Clear();
-            foreach (string element in clip) {
-                listBox1.Items.Add(element);
+            if (this.listBox1.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(updateLB);
+                this.Invoke(d, new object[] { });
             }
-
+            else
+            {
+                listBox1.Items.Clear();
+                foreach (string element in clip) {
+                    listBox1.Items.Add(element);
+                }
+            }
         }
 
 
@@ -296,7 +314,27 @@ namespace CloudClip
 
                 while (reader.Read())
                 {
-                    Console.WriteLine(reader.Value);
+                    if (reader.Value != null && reader.Value.ToString() == "clip")
+                    {
+                        reader.Read();
+                        String text = reader.Value.ToString();
+                        reader.Read();
+                        reader.Read();
+                        if (reader.Value.ToString() == "add")
+                        {
+                            clip.AddLast(text);
+                            updateLB();
+                            if (clip.Count == 1)
+                            {
+                                loadClipBoard();
+                            }
+                        }
+                        else
+                        {
+                            LinkedListNode<String> node = clip.Find(text);
+                            clip.Remove(node);
+                        }
+                    }
                 }
                 response.Close();
             }
