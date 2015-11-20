@@ -107,8 +107,10 @@ namespace CloudClip
         {
             if (clip.Count > 0)
             {
+                String text = clip.First();
                 clip.RemoveFirst();
                 loadClipBoard();
+                MessageServerRemove(text);
             }
             
             
@@ -244,14 +246,30 @@ namespace CloudClip
         }
 
 
-        private void MessageServerAdd(String clip)
+        private void MessageServerAdd(String text)
         {
             if (isConnected)
             {
                 HttpWebRequest request = WebRequest.CreateHttp(url + "add");
                 request.Headers.Add("session", sessionKey);
                 request.Headers.Add("uuid", uuid);
-                request.Headers.Add("clip", clip);
+                request.Headers.Add("clip", text);
+                request.Method = "POST";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                response.Close();
+
+            }
+        }
+
+        private void MessageServerRemove(String text)
+        {
+            if (isConnected)
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(url + "remove");
+                request.Headers.Add("session", sessionKey);
+                request.Headers.Add("uuid", uuid);
+                request.Headers.Add("clip", text);
                 request.Method = "POST";
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
