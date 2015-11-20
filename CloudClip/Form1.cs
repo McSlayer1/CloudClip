@@ -19,7 +19,7 @@ namespace CloudClip
     {
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
-        String url = "http://159.203.86.104/CloudClipServer/Service?method=";
+        String url = "http://159.203.86.104:8080/CloudClipServer/Service?method=";
         String sessionKey;
         String uuid;
 
@@ -61,6 +61,7 @@ namespace CloudClip
                     {
                         clip.AddFirst(text);
                         updateLB();
+                        MessageServerAdd(text);
                     }
                          
 
@@ -217,6 +218,7 @@ namespace CloudClip
 
                     updateLB();
                     loadClipBoard();
+                    isConnected = true;
                 }
 
                 response.Close();
@@ -240,6 +242,24 @@ namespace CloudClip
                 response.Close();
             }
         }
+
+
+        private void MessageServerAdd(String clip)
+        {
+            if (isConnected)
+            {
+                HttpWebRequest request = WebRequest.CreateHttp(url + "add");
+                request.Headers.Add("session", sessionKey);
+                request.Headers.Add("uuid", uuid);
+                request.Headers.Add("clip", clip);
+                request.Method = "POST";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                response.Close();
+
+            }
+        }
+
 
         private void MonitorConnection()
         {
