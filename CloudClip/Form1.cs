@@ -20,9 +20,12 @@ namespace CloudClip
     {
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
-        String url = "http://159.203.86.104:8080/CloudClipServer/Service?method=";
+        String url = "http://159.203.86.104:8080/CloudClipServer/Service?method="; // production
+        // String url = "http://192.168.0.105:8080/CloudClipServer/Service?method="; // qa
+        // String url = "http://localhost:8080/CloudClipServer/Service?method="; // dev
         String sessionKey;
         String uuid;
+        Thread fetchThread;
 
         // This delegate enables asynchronous calls for setting
         // the text property on a TextBox control.
@@ -211,7 +214,7 @@ namespace CloudClip
 
             sessionKey = sessionKeyTextBox.Text;
 
-            if (sessionKey.Length > 0)
+            if (sessionKey.Length > 0 && !isConnected)
             {
 
                 HttpWebRequest request = WebRequest.CreateHttp(url + "connect");
@@ -242,7 +245,8 @@ namespace CloudClip
                     loadClipBoard();
                     isConnected = true;
 
-                    new Thread(new ThreadStart(MonitorConnection)).Start();
+                    fetchThread = new Thread(new ThreadStart(MonitorConnection));
+                    fetchThread.Start();
                 }
 
                 response.Close();
@@ -257,10 +261,13 @@ namespace CloudClip
                 request.Headers.Add("session", sessionKey);
                 request.Headers.Add("uuid", uuid);
                 HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+                Console.WriteLine("1");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    Console.WriteLine("2");
                     isConnected = false;
+                    fetchThread.Abort();
                 }
 
                 response.Close();

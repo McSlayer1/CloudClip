@@ -40,7 +40,7 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(8, 8);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(2);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(138, 212);
             this.listBox1.TabIndex = 1;
@@ -59,7 +59,7 @@
             // RemoveButton
             // 
             this.RemoveButton.Location = new System.Drawing.Point(149, 23);
-            this.RemoveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RemoveButton.Margin = new System.Windows.Forms.Padding(2);
             this.RemoveButton.Name = "RemoveButton";
             this.RemoveButton.Size = new System.Drawing.Size(75, 33);
             this.RemoveButton.TabIndex = 3;
@@ -70,7 +70,7 @@
             // sessionKeyTextBox
             // 
             this.sessionKeyTextBox.Location = new System.Drawing.Point(149, 120);
-            this.sessionKeyTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sessionKeyTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.sessionKeyTextBox.Name = "sessionKeyTextBox";
             this.sessionKeyTextBox.Size = new System.Drawing.Size(77, 20);
             this.sessionKeyTextBox.TabIndex = 4;
@@ -89,7 +89,7 @@
             // connectButton
             // 
             this.connectButton.Location = new System.Drawing.Point(149, 147);
-            this.connectButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.connectButton.Margin = new System.Windows.Forms.Padding(2);
             this.connectButton.Name = "connectButton";
             this.connectButton.Size = new System.Drawing.Size(87, 22);
             this.connectButton.TabIndex = 6;
@@ -108,9 +108,10 @@
             this.Controls.Add(this.RemoveButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listBox1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Clipboard";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
