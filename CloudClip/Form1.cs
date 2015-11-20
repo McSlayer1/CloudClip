@@ -316,6 +316,7 @@ namespace CloudClip
                 request.Headers.Add("session", sessionKey);
                 request.Headers.Add("uuid", uuid);
                 request.KeepAlive = true;
+                request.Timeout = Timeout.Infinite;
                 HttpWebResponse response = (HttpWebResponse) request.GetResponse();
                 JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
 
