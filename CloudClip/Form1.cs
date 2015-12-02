@@ -21,9 +21,9 @@ namespace CloudClip
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
         // String url = "http://jbosswildfly-rwjames64.rhcloud.com/CloudClipServer/Service?method=";
-        // String url = "http://159.203.86.104:8080/CloudClipServer/Service?method="; // production
+        String url = "http://159.203.86.104:8080/CloudClipServer/Service?method="; // production
         // String url = "http://192.168.0.105:8080/CloudClipServer/Service?method="; // qa
-        String url = "http://localhost:8080/CloudClipServer/Service?method="; // dev
+        // String url = "http://localhost:8080/CloudClipServer/Service?method="; // dev
         String sessionKey;
         String uuid;
         Thread fetchThread;
