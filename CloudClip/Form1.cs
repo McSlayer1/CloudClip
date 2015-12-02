@@ -20,9 +20,10 @@ namespace CloudClip
     {
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
-        String url = "http://159.203.86.104:8080/CloudClipServer/Service?method="; // production
+        // String url = "http://jbosswildfly-rwjames64.rhcloud.com/CloudClipServer/Service?method=";
+        // String url = "http://159.203.86.104:8080/CloudClipServer/Service?method="; // production
         // String url = "http://192.168.0.105:8080/CloudClipServer/Service?method="; // qa
-        // String url = "http://localhost:8080/CloudClipServer/Service?method="; // dev
+        String url = "http://localhost:8080/CloudClipServer/Service?method="; // dev
         String sessionKey;
         String uuid;
         Thread fetchThread;
@@ -282,8 +283,10 @@ namespace CloudClip
                 HttpWebRequest request = WebRequest.CreateHttp(url + "add");
                 request.Headers.Add("session", sessionKey);
                 request.Headers.Add("uuid", uuid);
-                request.Headers.Add("clip", text);
                 request.Method = "POST";
+                StreamWriter writer = new StreamWriter(request.GetRequestStream());
+                writer.WriteLine(text);
+                writer.Flush();
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 response.Close();
@@ -298,8 +301,11 @@ namespace CloudClip
                 HttpWebRequest request = WebRequest.CreateHttp(url + "remove");
                 request.Headers.Add("session", sessionKey);
                 request.Headers.Add("uuid", uuid);
-                request.Headers.Add("clip", text);
                 request.Method = "POST";
+                request.Method = "POST";
+                StreamWriter writer = new StreamWriter(request.GetRequestStream());
+                writer.WriteLine(text);
+                writer.Flush();
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 response.Close();
