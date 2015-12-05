@@ -18,6 +18,7 @@ namespace CloudClip
 {
     public partial class Form1 : Form
     {
+        //true or false for if session is connected
         Boolean isConnected = false;
         LinkedList<string> clip = new LinkedList<string>(); //list of items in clipboard(text only)
         // String url = "http://jbosswildfly-rwjames64.rhcloud.com/CloudClipServer/Service?method=";
@@ -78,13 +79,14 @@ namespace CloudClip
                 else if (iData.GetDataPresent(DataFormats.Bitmap))
                 {
                     Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);
+
                     // do something with it
                 }
             }
         }
 
 
-
+        //initalize form
         public Form1()
         {
             InitializeComponent();
@@ -199,17 +201,20 @@ namespace CloudClip
             
         }
 
+        //removes first item from clip array
         private void RemoveButton_Click(object sender, EventArgs e)
         {
             removeClip();
             updateLB();
         }
-
+        //connect button
         private void label2_Click(object sender, EventArgs e)
         {
             Connect();
         }
 
+
+        //connects to server
         private void Connect()
         {
 
@@ -253,7 +258,7 @@ namespace CloudClip
                 response.Close();
             }
         }
-
+        //disconnects from server
         private void Disconnect()
         {
             if (isConnected)
@@ -275,7 +280,7 @@ namespace CloudClip
             }
         }
 
-
+        //sends message to server to tell it a new item as been added to the array
         private void MessageServerAdd(String text)
         {
             if (isConnected)
@@ -294,6 +299,7 @@ namespace CloudClip
             }
         }
 
+        //sends message to server to tell it a new item as been removed from the array
         private void MessageServerRemove(String text)
         {
             if (isConnected)
@@ -313,7 +319,7 @@ namespace CloudClip
             }
         }
 
-
+        //watches connection 
         private void MonitorConnection()
         {
             while (isConnected)
