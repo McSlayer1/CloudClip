@@ -164,6 +164,25 @@ namespace CloudClip
             }
         }
 
+        void setConnectButtonText()
+        {
+            if (this.connectButton.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(setConnectButtonText);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                if (isConnected)
+                {
+                    connectButton.Text = "Disconnect";
+                }
+                else
+                {
+                    connectButton.Text = "Start/Connect";
+                }
+            }
+        }
 
         // shiftup currently not used
         void shiftUp()
@@ -207,12 +226,6 @@ namespace CloudClip
             removeClip();
             updateLB();
         }
-        //connect button
-        private void label2_Click(object sender, EventArgs e)
-        {
-            Connect();
-        }
-
 
         //connects to server
         private void Connect()
@@ -225,10 +238,11 @@ namespace CloudClip
 
                 HttpWebRequest request = WebRequest.CreateHttp(url + "connect");
                 request.Headers.Add("session", sessionKey);
-                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                try
                 {
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
                     JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
                     reader.SupportMultipleContent = true;
                     reader.Read();
@@ -237,7 +251,9 @@ namespace CloudClip
                     uuid = reader.Value.ToString();
 
                     Console.WriteLine(uuid);
-                    
+
+                    clip.Clear();
+
                     while (reader.Read())
                     {
                         if (reader.Value != null && reader.Value.ToString() == "clip")
@@ -250,12 +266,17 @@ namespace CloudClip
                     updateLB();
                     loadClipBoard();
                     isConnected = true;
+                    setConnectButtonText();
 
                     fetchThread = new Thread(new ThreadStart(MonitorConnection));
                     fetchThread.Start();
-                }
 
-                response.Close();
+                    response.Close();
+                }
+                catch (WebException)
+                {
+                    MessageBox.Show("Unable to establish a connection");
+                }
             }
         }
         //disconnects from server
@@ -267,12 +288,11 @@ namespace CloudClip
                 request.Headers.Add("session", sessionKey);
                 request.Headers.Add("uuid", uuid);
                 HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-                Console.WriteLine("1");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    Console.WriteLine("2");
                     isConnected = false;
+                    setConnectButtonText();
                     fetchThread.Abort();
                 }
 
@@ -329,45 +349,63 @@ namespace CloudClip
                 request.Headers.Add("uuid", uuid);
                 request.KeepAlive = true;
                 request.Timeout = Timeout.Infinite;
-                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-                JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
-
-                while (reader.Read())
+                try
                 {
-                    if (reader.Value != null && reader.Value.ToString() == "clip")
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    JsonReader reader = new JsonTextReader(new StreamReader(response.GetResponseStream()));
+
+                    while (reader.Read())
                     {
-                        reader.Read();
-                        String text = reader.Value.ToString();
-                        reader.Read();
-                        reader.Read();
-                        if (reader.Value.ToString() == "add")
+                        if (reader.Value != null && reader.Value.ToString() == "clip")
                         {
-                            clip.AddLast(text);
-                            updateLB();
-                            if (clip.Count == 1)
+                            reader.Read();
+                            String text = reader.Value.ToString();
+                            reader.Read();
+                            reader.Read();
+                            if (reader.Value.ToString() == "add")
                             {
+                                clip.AddLast(text);
+                                updateLB();
+                                if (clip.Count == 1)
+                                {
+                                    loadClipBoard();
+                                }
+                            }
+                            else
+                            {
+                                LinkedListNode<String> node = clip.Find(text);
+                                if (node != null)
+                                {
+                                    clip.Remove(node);
+                                }
+                                updateLB();
                                 loadClipBoard();
                             }
                         }
-                        else
-                        {
-                            LinkedListNode<String> node = clip.Find(text);
-                            if (node != null)
-                            {
-                                clip.Remove(node);
-                            }
-                            updateLB();
-                            loadClipBoard();
-                        }
                     }
+                    response.Close(); 
                 }
-                response.Close();
+                catch(WebException) // server returned an error
+                {
+                    isConnected = false;
+                    uuid = null;
+                    setConnectButtonText();
+
+                    MessageBox.Show("Connection to server lost");
+                }
             }
         }
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            Connect();
+            if (!isConnected)
+            {
+                Connect();
+            }
+            else
+            {
+                Disconnect();
+            }
         }
     }
 }
