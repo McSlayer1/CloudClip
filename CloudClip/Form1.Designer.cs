@@ -72,6 +72,7 @@
             this.Controls.Add(this.RemoveButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Form1";
