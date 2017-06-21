@@ -31,6 +31,8 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.RemoveButton = new System.Windows.Forms.Button();
+            this.btnClearAll = new System.Windows.Forms.Button();
+            this.btnClearAllButSelected = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -55,7 +57,7 @@
             // 
             // RemoveButton
             // 
-            this.RemoveButton.Location = new System.Drawing.Point(149, 23);
+            this.RemoveButton.Location = new System.Drawing.Point(150, 23);
             this.RemoveButton.Margin = new System.Windows.Forms.Padding(2);
             this.RemoveButton.Name = "RemoveButton";
             this.RemoveButton.Size = new System.Drawing.Size(75, 33);
@@ -64,11 +66,35 @@
             this.RemoveButton.UseVisualStyleBackColor = true;
             this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
+            // btnClearAll
+            // 
+            this.btnClearAll.Location = new System.Drawing.Point(150, 60);
+            this.btnClearAll.Margin = new System.Windows.Forms.Padding(2);
+            this.btnClearAll.Name = "btnClearAll";
+            this.btnClearAll.Size = new System.Drawing.Size(75, 33);
+            this.btnClearAll.TabIndex = 4;
+            this.btnClearAll.Text = "Clear All";
+            this.btnClearAll.UseVisualStyleBackColor = true;
+            this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
+            // 
+            // btnClearAllButSelected
+            // 
+            this.btnClearAllButSelected.Location = new System.Drawing.Point(150, 97);
+            this.btnClearAllButSelected.Margin = new System.Windows.Forms.Padding(2);
+            this.btnClearAllButSelected.Name = "btnClearAllButSelected";
+            this.btnClearAllButSelected.Size = new System.Drawing.Size(75, 37);
+            this.btnClearAllButSelected.TabIndex = 5;
+            this.btnClearAllButSelected.Text = "Clear All But Selected";
+            this.btnClearAllButSelected.UseVisualStyleBackColor = true;
+            this.btnClearAllButSelected.Click += new System.EventHandler(this.btnClearAllButSelected_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(234, 226);
+            this.Controls.Add(this.btnClearAllButSelected);
+            this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.RemoveButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listBox1);
@@ -89,6 +115,8 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button RemoveButton;
+        private System.Windows.Forms.Button btnClearAll;
+        private System.Windows.Forms.Button btnClearAllButSelected;
     }
 }
 

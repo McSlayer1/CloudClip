@@ -203,5 +203,37 @@ namespace CloudClip
             removeClip();
             updateLB();
         }
+
+        private void btnClearAll_Click(object sender, EventArgs e)
+        {
+            int removedNum = removeAllButFirst();
+            clip.RemoveFirst();
+            updateLB();
+            MessageBox.Show(++removedNum + " clips removed");
+        }
+
+        private void btnClearAllButSelected_Click(object sender, EventArgs e)
+        {
+            int removedNum = removeAllButFirst();
+            updateLB();
+            MessageBox.Show(removedNum + " clips removed");
+        }
+
+        private int removeAllButFirst()
+        {
+            int removedNum = 0;
+            if (clip.First == null)
+            {
+                MessageBox.Show("There are no clips available");
+                return 0;
+            }
+            while (clip.First.Next != null)
+            {
+                clip.RemoveLast();
+                removedNum++;
+            }
+
+            return removedNum;
+        }
     }
 }
