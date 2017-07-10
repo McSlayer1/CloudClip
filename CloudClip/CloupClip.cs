@@ -129,7 +129,7 @@ namespace CloudClip
     //set head of clip list as item in system clipboard
         void loadClipBoard()
         {
-            if (this.listBox1.InvokeRequired)
+            if (this.tbpMisc.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(loadClipBoard);
                 this.Invoke(d, new object[] { });
@@ -147,16 +147,16 @@ namespace CloudClip
         //update list box
         void updateLB()
         {
-            if (this.listBox1.InvokeRequired)
+            if (this.tbpMisc.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(updateLB);
                 this.Invoke(d, new object[] { });
             }
             else
             {
-                listBox1.Items.Clear();
+                tbpMisc.Items.Clear();
                 foreach (string element in clip) {
-                    listBox1.Items.Add(element);
+                    tbpMisc.Items.Add(element);
                 }
             }
         }
@@ -188,10 +188,10 @@ namespace CloudClip
        
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem == null) {
+            if (tbpMisc.SelectedItem == null) {
                 return;
             }
-            string selection = listBox1.GetItemText(listBox1.SelectedItem); //set selected index
+            string selection = tbpMisc.GetItemText(tbpMisc.SelectedItem); //set selected index
             LinkedListNode<string> temp = clip.Find(selection); // set index to temp
             clip.Remove(selection); // remove original
             clip.AddFirst(temp); // add back to top
